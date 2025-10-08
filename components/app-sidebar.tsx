@@ -19,6 +19,7 @@ import {
   IconSearch,
   IconSettings,
   IconUsers,
+  IconCurrency,
 } from "@tabler/icons-react"
 
 import { NavDocuments } from "@/components/nav-documents"
@@ -39,28 +40,28 @@ const staticData = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
+      title: "Invoicing",
+      url: "/dashboard/invoicing",
+      icon: IconFileDescription,
     },
     {
-      title: "Analytics",
-      url: "#",
+      title: "Cash Flow",
+      url: "/dashboard/cash-flow",
       icon: IconChartBar,
     },
     {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
+      title: "Customers",
+      url: "/dashboard/customers",
+      icon: IconUsers,
     },
     {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
+      title: "Transactions",
+      url: "/dashboard/transactions",
+      icon: IconListDetails,
     },
   ],
   navClouds: [

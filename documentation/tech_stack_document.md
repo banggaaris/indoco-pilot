@@ -1,90 +1,124 @@
-# Tech Stack Document
+# indoco-pilot Tech Stack Document
 
-This document explains the key technologies chosen for the **codeguide-starter** project. It’s written in everyday language so anyone—technical or not—can understand why each tool was picked and how it supports the application.
+This document explains, in everyday language, the key technology choices behind the indoco-pilot web application. It should help everyone—from project managers to end users—understand why we picked each tool and how they all work together.
 
 ## 1. Frontend Technologies
-The frontend is everything the user sees and interacts with. For this project, we’ve used:
 
-- **Next.js (App Router)**
-  - A React framework that makes page routing, server-side rendering, and API routes very simple.
-  - Enhances user experience by pre-rendering pages on the server or at build time, leading to faster initial load.
-- **React 18**
-  - The underlying library for building user interfaces with reusable components.
-  - Provides a smooth, interactive experience thanks to its virtual DOM and modern hooks.
-- **TypeScript**
-  - A superset of JavaScript that adds types (labels for data).
-  - Helps catch errors early during development and makes the code easier to maintain.
-- **CSS (globals.css & theme.css)**
-  - **globals.css** applies base styles (fonts, colors, resets) across the entire app.
-  - **dashboard/theme.css** defines the look and feel specific to the dashboard area.
-  - This separation keeps styles organized and avoids accidental style conflicts.
+These are the tools we used to build everything you see and interact with in your browser.
 
-By combining these tools, we have a clear structure (Next.js folders for pages and layouts), safer code (TypeScript), and flexible styling with vanilla CSS.
+• Next.js (App Router)
+  - Provides a simple folder-based routing system under the `app/` directory.
+  - Enables a mix of server-side rendering (SSR) and client-side rendering (CSR) for fast page loads and good SEO.
+
+• React
+  - The core library for building interactive user interface components.
+  - Lets us split the UI into reusable pieces (buttons, forms, lists, etc.).
+
+• TypeScript
+  - A superset of JavaScript that adds type checking.
+  - Helps catch errors early, making the code more reliable and easier to maintain.
+
+• CSS (globals.css, theme.css)
+  - `globals.css` sets styles that apply across the entire app (colors, fonts, basic layouts).
+  - `theme.css` holds custom themes or component-specific styles.
+  - Using plain CSS keeps things simple and straightforward.
+
+How these choices enhance the experience:
+- Fast page loads thanks to Next.js’s mix of SSR and static generation.
+- A consistent, polished look by managing styles in global and theme files.
+- Interactive, dynamic content powered by React components.
+- Fewer runtime errors and better developer experience with TypeScript.
 
 ## 2. Backend Technologies
-The backend handles data, user accounts, and the logic behind the scenes. Our choices here are:
 
-- **Next.js API Routes**
-  - Allows us to write server-side code (`route.ts` files) alongside our frontend in the same project.
-  - Runs on Node.js, so we can handle requests like sign-up, sign-in, and data fetching in one place.
-- **Node.js Runtime**
-  - The JavaScript environment on the server that executes our API routes.
-- **bcrypt** (npm package)
-  - A library for hashing passwords securely before storing them.
-  - Ensures that even if someone got access to our data, raw passwords aren’t visible.
-- **(Optional) NextAuth.js or JWT**
-  - While this starter kit shows a custom authentication flow, it can easily integrate services like NextAuth.js for email-based login or JWT (JSON Web Tokens) for stateless sessions.
+Here’s what happens behind the scenes when you sign in, fetch data, or submit a form.
 
-These components work together to receive user credentials, verify or store them securely, manage sessions or tokens, and deliver protected data back to the frontend.
+• Next.js API Routes
+  - Built-in feature of Next.js under `app/api/`.
+  - We use it to handle authentication (sign-in, sign-up) and any future data APIs.
+
+• Node.js Runtime
+  - Runs our server code in a JavaScript environment outside the browser.
+
+• Database (e.g., PostgreSQL, MongoDB)
+  - Stores user accounts, credentials, and any other data.
+  - We access it through an ORM (like Prisma for SQL or Mongoose for MongoDB).
+  - This lets us write database queries in code instead of raw SQL.
+
+How these components work together:
+1. A user fills in the sign-in form on the frontend.
+2. The form calls a Next.js API route (e.g., `/api/auth/login`).
+3. That API route checks the credentials against the database.
+4. On success, it creates a secure session and returns a confirmation to your browser.
+5. Your browser stores the session info and grants access to protected pages (like the dashboard).
 
 ## 3. Infrastructure and Deployment
-Infrastructure covers where and how we host the app, as well as how changes get delivered:
 
-- **Git & GitHub**
-  - Version control system (Git) and remote hosting (GitHub) keep track of all code changes and allow team collaboration.
-- **Vercel (or Netlify)**
-  - A popular hosting service optimized for Next.js, with one-click deployments and global content delivery.
-  - Automatically rebuilds and deploys the site whenever code is pushed to the main branch.
-- **GitHub Actions (CI/CD)**
-  - Automates tasks like linting (ESLint), formatting (Prettier), and running any tests you add.
-  - Ensures that only clean, tested code goes live.
+We’ve set up a streamlined process so updates go live quickly and reliably.
 
-Together, these tools provide a reliable, scalable setup where every code change is tested and deployed quickly, with minimal manual work.
+• Version Control: Git + GitHub
+  - All code is stored in a GitHub repository.
+  - Branching and pull requests allow safe collaboration and code review.
+
+• Continuous Integration / Continuous Deployment (CI/CD): GitHub Actions
+  - Automatically runs tests and checks whenever new code is pushed.
+  - On successful checks, deploys the latest version to our hosting platform.
+
+• Hosting Platform: Vercel
+  - Optimized for Next.js apps.
+  - Handles scaling, HTTPS certificates, and global edge caching out of the box.
+
+These choices ensure:
+- Every change goes through review and automated tests.
+- Deployments happen automatically with minimal manual work.
+- The app stays up and performs well under load.
 
 ## 4. Third-Party Integrations
-While this starter kit is minimal by design, it already includes or can easily add:
 
-- **bcrypt**
-  - For secure password hashing (included as an npm dependency).
-- **NextAuth.js** (optional)
-  - A full-featured authentication library supporting email/password, OAuth, and more.
-- **Sentry or LogRocket** (optional)
-  - For real-time error tracking and performance monitoring in production.
+At this stage, we don’t have any external services directly wired into the codebase. However, it’s straightforward to add services like:
 
-These integrations help extend the app’s capabilities without building every feature from scratch.
+• Analytics (e.g., Google Analytics, Mixpanel)
+• Payment processing (e.g., Stripe, PayPal)
+• Email delivery (e.g., SendGrid, Mailgun)
+• Social login (e.g., Google, Facebook)
+
+When needed, we can plug any of these in via their JavaScript SDKs or REST APIs.
 
 ## 5. Security and Performance Considerations
-We’ve baked in several measures to keep users safe and the app running smoothly:
 
-Security:
-- Passwords are never stored in plain text—bcrypt hashes them with a random salt.
-- API routes can implement CSRF protection and input validation to block malicious requests.
-- Session tokens or cookies are marked secure and HttpOnly to prevent theft via JavaScript.
+Security Measures:
+• Password Handling
+  - Passwords are hashed and salted before storing in the database.
+  - No plain-text passwords ever leave the server.
 
-Performance:
-- Server-side rendering (SSR) and static site generation (SSG) in Next.js deliver pages faster.
-- Code splitting and lazy-loaded components ensure users only download what they need.
-- Global CSS and theme files are small and cached by the browser for quick repeat visits.
+• Session Management
+  - Secure cookies or token-based sessions keep users signed in safely.
 
-These strategies work together to give users a fast, secure experience every time.
+• Input Validation & Sanitization
+  - Every form input is checked on the server to prevent malicious content (XSS, SQL injection).
+
+• HTTPS Everywhere
+  - All traffic to and from our app is encrypted by default.
+
+Performance Optimizations:
+• Server-Side Rendering (SSR) & Static Generation
+  - Pre-renders pages when possible for instant load times.
+
+• Code Splitting & Dynamic Imports
+  - Loads only the code needed for the current page, speeding up initial loads.
+
+• Caching & CDN
+  - Vercel’s edge network caches static assets close to users worldwide.
+
+• Lazy Loading
+  - Images and heavy components load only when they come into view.
 
 ## 6. Conclusion and Overall Tech Stack Summary
-In building **codeguide-starter**, we chose technologies that:
 
-- Align with modern web standards (Next.js, React, TypeScript).
-- Provide a clear, file-based project structure for rapid onboarding.
-- Offer built-in support for server-side rendering, API routes, and static assets.
-- Emphasize security through password hashing, session management, and safe defaults.
-- Enable easy scaling and future enhancements via modular code and optional integrations.
+• Frontend: Next.js + React + TypeScript + CSS
+• Backend: Next.js API Routes + Node.js + Database (via ORM)
+• Infrastructure: GitHub, GitHub Actions, Vercel
+• Security: Encrypted connections, hashed passwords, input checks
+• Performance: SSR/Static, code splitting, caching
 
-This stack strikes a balance between simplicity for newcomers and flexibility for experienced teams. It accelerates development of a secure authentication flow and a polished dashboard, while leaving room to plug in databases, test suites, and advanced features as the project grows.
+Together, these technologies create a fast, secure, and maintainable web application. Our stack choices align with modern best practices, deliver a great user experience, and leave room to grow with new features over time. If you have any questions about why we picked a particular tool or how something works, just let us know!
